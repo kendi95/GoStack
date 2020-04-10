@@ -29,7 +29,6 @@ app.post('/repositories', (req, res) => {
 app.put('/repositories/:id', (req, res) => {
   const { id } = req.params;
   const { title, url, techs } = req.body;
-  const { likes } = req.body;
 
   const index = repositories.findIndex((p) => p.id === id);
 
@@ -37,15 +36,12 @@ app.put('/repositories/:id', (req, res) => {
     return res.status(400).send();
   }
 
-  if (likes) {
-    return res.status(200).json({ likes: 0 });
-  }
-
   const project = {
     id,
     title,
     url,
     techs,
+    likes: repositories[index].likes,
   };
   repositories[index] = project;
   return res.status(200).json(project);
@@ -82,7 +78,7 @@ app.post('/repositories/:id/like', (req, res) => {
   };
 
   repositories[index] = project;
-  return res.status(201).json({ likes });
+  return res.status(201).json(project);
 });
 
 module.exports = app;
